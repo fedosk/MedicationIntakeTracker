@@ -14,6 +14,7 @@ interface UniversalButtonProps {
   onPress: () => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  disabled?: boolean;
 }
 
 const UniversalButton: React.FC<UniversalButtonProps> = ({
@@ -21,9 +22,13 @@ const UniversalButton: React.FC<UniversalButtonProps> = ({
   onPress,
   style,
   textStyle,
+  disabled,
 }) => {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.button, style, disabled && styles.buttonDisabled]}
+      onPress={onPress}
+      disabled={disabled}>
       <Text style={[styles.buttonText, textStyle]}>{label}</Text>
     </TouchableOpacity>
   );
@@ -32,7 +37,6 @@ const UniversalButton: React.FC<UniversalButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: THEME_COLORS.PRIMARY,
-    minWidth: 140,
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -44,6 +48,9 @@ const styles = StyleSheet.create({
     color: THEME_COLORS.WHITE,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  buttonDisabled: {
+    backgroundColor: THEME_COLORS.PRIMARY_DISABLED,
   },
 });
 

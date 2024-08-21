@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import UniversalButton from '../../../components/UniversalButton';
+import UniversalInput from '../../../components/UniversalInput';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { RootState } from '../../../store';
-import { updateMedication } from '../../../store/medication/slice/medicationsSlice';
-import { IMedication } from '../../../store/medication/types/medicationSchema';
+import {
+  deleteMedication,
+  updateMedication,
+} from '../../../store/medication/slice/medicationsSlice';
+import {
+  IMedication,
+  IMedicationWithoutTracking,
+} from '../../../store/medication/types/medicationSchema';
 
 interface EditMedicationProps {
   route: {
@@ -17,74 +24,97 @@ interface EditMedicationProps {
   };
 }
 
-const EditMedication: React.FC<EditMedicationProps> = ({ route }) => {
+const EditMedication: React.FC<EditMedicationProps> = ({
+  navigation,
+  route,
+}) => {
   const { id } = route.params;
+
   const dispatch = useDispatch();
   const medication = useSelector((state: RootState) =>
     state.medications.medications.find(med => med.id === id),
   ) as IMedication;
 
-  const [name, setName] = useState<string>(medication.name || '');
+  const [name, setName] = useState<string>(medication?.name || '');
   const [description, setDescription] = useState<string>(
-    medication.description || '',
+    medication?.description || '',
   );
-  const [initialCount, setInitialCount] = useState<number>(
-    medication.initial_count,
+  const [initialCount, setInitialCount] = useState<string>(
+    medication?.initial_count?.toString() || '',
   );
-  const [destinationCount, setDestinationCount] = useState<number>(
-    medication.destination_count,
+  const [destinationCount, setDestinationCount] = useState<string>(
+    medication?.destination_count?.toString() || '',
   );
-  const [currentCount, setCurrentCount] = useState(medication.current_count);
+  const [currentCount, setCurrentCount] = useState<string>(
+    medication?.current_count?.toString() || '',
+  );
 
   const handleSave = () => {
-    const updatedMedication: IMedication = {
-      ...medication,
+    const parsedInitialCount = parseInt(initialCount, 10);
+    const parsedDestinationCount = parseInt(destinationCount, 10);
+    const parsedCurrentCount = parseInt(currentCount, 10);
+
+    if (
+      isNaN(parsedInitialCount) ||
+      isNaN(parsedDestinationCount) ||
+      isNaN(parsedCurrentCount)
+    ) {
+      Alert.alert('Invalid input', 'Please enter valid numbers for counts.');
+      return;
+    }
+
+    const updatedMedication: IMedicationWithoutTracking = {
       name,
       description,
-      initial_count: initialCount,
-      destination_count: destinationCount,
-      current_count: currentCount,
+      initial_count: parsedInitialCount,
+      destination_count: parsedDestinationCount,
+      current_count: parsedCurrentCount,
+      is_active: medication.is_active,
     };
-    dispatch(updateMedication({ id, updatedMedication }));
+
+    dispatch(updateMedication({ id, medication: updatedMedication })).then(() =>
+      navigation.goBack(),
+    );
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteMedication(id)).then(() => navigation.push('Home'));
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Name</Text>
-      <TextInput style={styles.input} value={name} onChangeText={setName} />
-
-      <Text style={styles.label}>Description</Text>
-      <TextInput
-        style={styles.input}
+      <UniversalInput label="Name" value={name} onChangeText={setName} />
+      <UniversalInput
+        label="Description"
         value={description}
         onChangeText={setDescription}
+        multiline
+        numberOfLines={4}
       />
-
-      <Text style={styles.label}>Initial Count</Text>
-      <TextInput
-        style={styles.input}
-        value={initialCount.toString()}
-        onChangeText={value => setInitialCount(parseInt(value, 10))}
+      <UniversalInput
+        label="Initial Count"
+        value={initialCount}
+        onChangeText={text => setInitialCount(text)}
         keyboardType="numeric"
       />
-
-      <Text style={styles.label}>Destination Count</Text>
-      <TextInput
-        style={styles.input}
-        value={destinationCount.toString()}
-        onChangeText={value => setDestinationCount(parseInt(value, 10))}
+      <UniversalInput
+        label="Destination Count"
+        value={destinationCount}
+        onChangeText={text => setDestinationCount(text)}
         keyboardType="numeric"
       />
-
-      <Text style={styles.label}>Current Count</Text>
-      <TextInput
-        style={styles.input}
-        value={currentCount.toString()}
-        onChangeText={value => setCurrentCount(parseInt(value, 10))}
+      <UniversalInput
+        label="Current Count"
+        value={currentCount}
+        onChangeText={text => setCurrentCount(text)}
         keyboardType="numeric"
       />
-
       <UniversalButton label="Save" onPress={handleSave} />
+      <UniversalButton
+        label="Delete"
+        onPress={handleDelete}
+        style={styles.deleteBtn}
+      />
     </View>
   );
 };
@@ -93,18 +123,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: THEME_COLORS.WHITE,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 16,
-  },
-  input: {
-    height: 40,
-    borderColor: THEME_COLORS.LIGHT30,
-    borderWidth: 1,
-    marginTop: 8,
-    paddingHorizontal: 8,
+  deleteBtn: {
+    backgroundColor: THEME_COLORS.ERROR,
   },
 });
 

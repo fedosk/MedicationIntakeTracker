@@ -13,7 +13,7 @@ export interface IMedication {
 
 export type IMedicationWithoutTracking = Omit<
   IMedication,
-  'id' | 'user_id' | 'created_at' | 'updated_at' | 'is_active'
+  'id' | 'user_id' | 'created_at' | 'updated_at'
 >;
 
 export type Medications = IMedication[];

@@ -9,9 +9,9 @@ import {
 import api from '.';
 
 export default class MedicationService {
-  static async getMedication(id: string): Promise<AxiosResponse<IMedication>> {
+  static async getMedication(id: number): Promise<AxiosResponse<IMedication>> {
     try {
-      const response = await api.get<IMedication>(`/medication/:${id}`);
+      const response = await api.get<IMedication>(`/medication/${id}`);
       return response;
     } catch (error) {
       console.error(error);
@@ -42,10 +42,14 @@ export default class MedicationService {
   }
 
   static async updateMedication(
+    id: number,
     medication: IMedicationWithoutTracking,
   ): Promise<AxiosResponse<IMedication>> {
     try {
-      const response = await api.put<IMedication>('/medication', medication);
+      const response = await api.put<IMedication>(
+        `/medication/${id}`,
+        medication,
+      );
       return response;
     } catch (error) {
       console.error(error);
@@ -53,9 +57,25 @@ export default class MedicationService {
     }
   }
 
-  static async deleteMedication(id: string): Promise<void> {
+  static async updateMedicationCount(
+    id: number,
+    current_count: number,
+  ): Promise<AxiosResponse<IMedication>> {
     try {
-      await api.delete(`/medication/:${id}`);
+      const response = await api.put<IMedication>(`/medication/${id}`, {
+        current_count,
+      });
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  static async deleteMedication(id: number): Promise<number> {
+    try {
+      await api.delete(`/medication/${id}`);
+      return id;
     } catch (error) {
       console.error(error);
       throw error;

@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
+import UniversalButton from '../../../components/UniversalButton';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { RootState } from '../../../store';
 import { IMedication } from '../../../store/medication/types/medicationSchema';
@@ -25,8 +26,8 @@ const MedicationDetails: React.FC<MedicationDetailsProps> = ({ route }) => {
 
   if (!medication) {
     return (
-      <View style={styles.container}>
-        <Text>Medication not found</Text>
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Medication not found</Text>
       </View>
     );
   }
@@ -36,37 +37,59 @@ const MedicationDetails: React.FC<MedicationDetailsProps> = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{medication.name}</Text>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={handleEditMedication}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
+        <View style={styles.headerLeft}>
+          <Text style={styles.title}>{medication.name}</Text>
+        </View>
+        <View style={styles.headerRight}>
+          <UniversalButton
+            style={styles.editButton}
+            label="Edit"
+            onPress={handleEditMedication}
+          />
+        </View>
       </View>
-      <Text style={styles.description}>{medication.description}</Text>
-      <View style={styles.countContainer}>
-        <Text style={styles.countLabel}>Initial Count:</Text>
-        <Text style={styles.countValue}>{medication.initial_count}</Text>
+      {medication.description ? (
+        <Text style={styles.description}>{medication.description}</Text>
+      ) : null}
+      <View style={styles.card}>
+        <Text style={styles.heading}>Counts</Text>
+        <View style={styles.countContainer}>
+          <Text style={styles.countLabel}>Initial Count:</Text>
+          <Text style={styles.countValue}>{medication.initial_count}</Text>
+        </View>
+        <View style={styles.countContainer}>
+          <Text style={styles.countLabel}>Destination Count:</Text>
+          <Text style={styles.countValue}>{medication.destination_count}</Text>
+        </View>
+        <View style={styles.countContainer}>
+          <Text style={styles.countLabel}>Current Count:</Text>
+          <Text style={styles.countValue}>{medication.current_count}</Text>
+        </View>
       </View>
-      <View style={styles.countContainer}>
-        <Text style={styles.countLabel}>Destination Count:</Text>
-        <Text style={styles.countValue}>{medication.destination_count}</Text>
-      </View>
-      <View style={styles.countContainer}>
-        <Text style={styles.countLabel}>Current Count:</Text>
-        <Text style={styles.countValue}>{medication.current_count}</Text>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 16,
     backgroundColor: THEME_COLORS.WHITE,
+    alignItems: 'stretch',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: THEME_COLORS.WHITE,
+  },
+  errorText: {
+    fontSize: 18,
+    color: THEME_COLORS.ALARM,
+    textAlign: 'center',
   },
   header: {
     flexDirection: 'row',
@@ -74,24 +97,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
+  headerLeft: {
+    width: '80%',
+  },
+  headerRight: {
+    width: '20%',
+  },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: THEME_COLORS.DARK,
   },
   editButton: {
-    backgroundColor: THEME_COLORS.PRIMARY,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 4,
-  },
-  editButtonText: {
-    color: THEME_COLORS.WHITE,
-    fontWeight: 'bold',
+    marginBottom: 0,
   },
   description: {
     fontSize: 16,
     marginBottom: 16,
+    color: THEME_COLORS.DARK,
+  },
+  card: {
+    backgroundColor: THEME_COLORS.WHITE,
+    padding: 16,
+    borderRadius: 8,
+    shadowColor: THEME_COLORS.DARK,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
     color: THEME_COLORS.DARK,
   },
   countContainer: {

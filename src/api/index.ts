@@ -1,10 +1,13 @@
+import { Platform } from 'react-native';
+
 import axios from 'axios';
 
 import store from '../store';
 import { setAccessToken } from '../store/user/slice/userSlice';
 import { IAuthResponse } from '../store/user/types/UserSchema';
 
-export const API_URL = 'http://localhost:8090/api';
+const localHost = Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
+export const API_URL = `http://${localHost}:8090/api`;
 
 const api = axios.create({
   baseURL: API_URL,
@@ -37,7 +40,7 @@ api.interceptors.response.use(
       error.response &&
       error.response.status === 401 &&
       error.config &&
-      !error.config_isRetry
+      !error.config._isRetry
     ) {
       originalRequest._isRetry = true;
 

@@ -12,31 +12,33 @@ import {
 import { useSelector } from 'react-redux';
 
 import { HomeProps } from '../../../app/navigationConfig/types/MainStackTypes';
-import FAB from '../../../components/FAB';
+import CreateMedicationModal from '../../../components/Modal';
 import UniversalButton from '../../../components/UniversalButton';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
-import { getMedicationsById } from '../../../store/medication/selectors/getMedications/getMedications';
+import { RootState } from '../../../store';
 import {
   fetchMedications,
   updateMedicationCount,
 } from '../../../store/medication/slice/medicationsSlice';
 import { IMedication } from '../../../store/medication/types/medicationSchema';
-import { logoutUser } from '../../../store/user/slice/userSlice';
 import { convertTimeToDateTimeString } from '../../../utils/timeHandler';
 
 const MedicationItem = React.memo(
   ({ item, navigation }: { item: IMedication; navigation }) => {
     const dispatch = useAppDispatch();
 
-    const pressHandler = () => {
+    const pressHandler = (type: 'increase' | 'decrease') => {
       dispatch(
         updateMedicationCount({
           id: item.id,
-          key: 'initial_count',
-          type: 'increase',
+          type,
         }),
       );
+    };
+
+    const isButtonDisabled = () => {
+      return item.current_count >= item.destination_count;
     };
 
     return (
@@ -65,7 +67,19 @@ const MedicationItem = React.memo(
               <Text style={styles.countLabel}>Current Count:</Text>
               <Text style={styles.countValue}>{item.current_count}</Text>
             </View>
-            <UniversalButton label="Take a medicine" onPress={pressHandler} />
+
+            <View style={styles.buttonsContainer}>
+              <UniversalButton
+                label="Decrease"
+                style={styles.decreaseButton}
+                onPress={() => pressHandler('decrease')}
+              />
+              <UniversalButton
+                label="Increase"
+                onPress={() => pressHandler('increase')}
+                disabled={isButtonDisabled()}
+              />
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -97,36 +111,31 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     );
   }
 
-  if (error) {
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.error}>{error}</Text>
-      </View>
-    );
-  }
-
-  const handlePress = async () => {
-    dispatch(logoutUser());
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <FlatList
-          refreshing={loading}
-          data={medications}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <MedicationItem item={item} navigation={navigation} />
-          )}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={10}
-          onRefresh={handleGetMedications}
-          contentContainerStyle={styles.contentContainer}
-        />
+    <SafeAreaView style={styles.centered}>
+      <View style={styles.centered}>
+        {medications?.length && !error ? (
+          <FlatList
+            refreshing={loading}
+            data={medications}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+              <MedicationItem item={item} navigation={navigation} />
+            )}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={10}
+            onRefresh={handleGetMedications}
+            contentContainerStyle={styles.contentContainer}
+          />
+        ) : null}
+        {!medications?.length ? (
+          <View style={styles.centered}>
+            <Text style={styles.error}>No medications found</Text>
+          </View>
+        ) : null}
       </View>
-      <FAB title="+" onPress={handlePress} />
+      <CreateMedicationModal />
     </SafeAreaView>
   );
 };
@@ -159,6 +168,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  buttonsContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  decreaseButton: {
+    backgroundColor: THEME_COLORS.ERROR,
   },
   cardContainer: {
     width: 350,

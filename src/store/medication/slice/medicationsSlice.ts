@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { RootState } from '../..';
 import MedicationService from '../../../api/MedicationService';
 import {
   IMedication,
@@ -27,70 +28,69 @@ export const fetchMedications = createAsyncThunk<Medications>(
   },
 );
 
-export const updateMedications = createAsyncThunk<
+export const updateMedication = createAsyncThunk<
+  IMedication,
+  { id: number; medication: IMedicationWithoutTracking }
+>('medications/updateMedication', async ({ id, medication }) => {
+  const response = await MedicationService.updateMedication(id, medication);
+  return response.data;
+});
+
+export const createMedication = createAsyncThunk<
   IMedication,
   IMedicationWithoutTracking
->('medications/fetchMedications', async medication => {
-  const response = await MedicationService.updateMedication(medication);
+>('medications/createMedication', async medication => {
+  const response = await MedicationService.postMedication(medication);
   return response.data;
+});
+
+export const deleteMedication = createAsyncThunk<number, number>(
+  'medications/deleteMedication',
+  async (id: number) => {
+    const response = await MedicationService.deleteMedication(id);
+    return response;
+  },
+);
+
+export const updateMedicationCount = createAsyncThunk<
+  IMedication,
+  {
+    id: number;
+    type: 'increase' | 'decrease';
+  },
+  {
+    state: RootState;
+    rejectValue: { error: string };
+  }
+>('medications/updateMedicationCount', async (payload, thunkAPI) => {
+  const { id, type } = payload;
+
+  const state = thunkAPI.getState();
+  const medication = state.medications.medications.find(m => m.id === id);
+
+  if (!medication) {
+    return thunkAPI.rejectWithValue({ error: 'Medication not found' });
+  }
+
+  const currentCount = medication.current_count || 0;
+  const adjustment = type === 'increase' ? 1 : -1;
+  const newCount = currentCount + adjustment;
+
+  try {
+    const response = await MedicationService.updateMedicationCount(
+      id,
+      newCount,
+    );
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ error: (error as Error).message });
+  }
 });
 
 const medicationsSlice = createSlice({
   name: 'medications',
   initialState,
-  reducers: {
-    setMedications: (state, action: PayloadAction<Medications>) => {
-      state.medications = action.payload;
-    },
-    addMedication: (state, action: PayloadAction<IMedication>) => {
-      state.medications.push(action.payload);
-    },
-    deleteMedication: (state, action: PayloadAction<number>) => {
-      state.medications = state.medications.filter(
-        medication => medication.id !== action.payload,
-      );
-    },
-    updateMedication: (
-      state,
-      action: PayloadAction<{ id: number; updatedMedication: IMedication }>,
-    ) => {
-      const { id, updatedMedication } = action.payload;
-      const index = state.medications.findIndex(
-        medication => medication.id === id,
-      );
-      if (index !== -1) {
-        state.medications[index] = updatedMedication;
-      }
-    },
-    updateMedicationCount: (
-      state,
-      action: PayloadAction<{
-        id: number;
-        key: 'initial_count' | 'current_count' | 'destination_count';
-        type: 'increase' | 'decrease';
-      }>,
-    ) => {
-      const { id, key, type } = action.payload;
-      const index = state.medications.findIndex(
-        medication => medication.id === id,
-      );
-
-      if (index !== -1) {
-        const medication = state.medications[index];
-        const updatedMedication = {
-          ...medication,
-          [key]:
-            type === 'increase' ? medication[key] + 1 : medication[key] - 1,
-        };
-
-        state.medications[index] = updatedMedication;
-      }
-    },
-
-    clearAllMedications: state => {
-      state.medications = [];
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(fetchMedications.pending, state => {
@@ -104,25 +104,32 @@ const medicationsSlice = createSlice({
       .addCase(fetchMedications.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch medications';
+      })
+      .addCase(updateMedication.fulfilled, (state, action) => {
+        const index = state.medications.findIndex(
+          medication => medication.id === action.payload.id,
+        );
+        if (index !== -1) {
+          state.medications[index] = action.payload;
+        }
+      })
+      .addCase(updateMedicationCount.fulfilled, (state, action) => {
+        const index = state.medications.findIndex(
+          medication => medication.id === action.payload.id,
+        );
+        if (index !== -1) {
+          state.medications[index] = action.payload;
+        }
+      })
+      .addCase(createMedication.fulfilled, (state, action) => {
+        state.medications.push(action.payload);
+      })
+      .addCase(deleteMedication.fulfilled, (state, action) => {
+        state.medications = state.medications.filter(
+          medication => medication.id !== action.payload,
+        );
       });
-    builder.addCase(updateMedications.fulfilled, (state, action) => {
-      const index = state.medications.findIndex(
-        medication => medication.id === action.payload.id,
-      );
-      if (index !== -1) {
-        state.medications[index] = action.payload;
-      }
-    });
   },
 });
-
-export const {
-  setMedications,
-  addMedication,
-  deleteMedication,
-  updateMedication,
-  clearAllMedications,
-  updateMedicationCount,
-} = medicationsSlice.actions;
 
 export default medicationsSlice.reducer;
