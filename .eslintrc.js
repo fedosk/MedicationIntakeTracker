@@ -42,7 +42,10 @@ module.exports = {
     'react-native/no-color-literals': 1,
     'react-native/no-raw-text': 2,
     'react-native/no-single-element-style-arrays': 2,
-    'sort-imports': ['error', {ignoreCase: true, ignoreDeclarationSort: true}],
+    'sort-imports': [
+      'error',
+      { ignoreCase: true, ignoreDeclarationSort: true },
+    ],
     'import/order': [
       'error',
       {

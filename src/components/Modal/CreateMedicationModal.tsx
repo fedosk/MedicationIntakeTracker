@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, View } from 'react-native';
 
-import { useDispatch } from 'react-redux';
-
 import { THEME_COLORS } from '../../constants/appConstants';
+import { useAppDispatch } from '../../store';
 import { createMedication } from '../../store/medication/slice/medicationsSlice';
 import { IMedicationWithoutTracking } from '../../store/medication/types/medicationSchema';
 import FAB from '../FAB';
@@ -11,7 +10,7 @@ import UniversalButton from '../UniversalButton';
 import UniversalInput from '../UniversalInput';
 
 const CreateMedicationModal: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [formState, setFormState] = useState<{

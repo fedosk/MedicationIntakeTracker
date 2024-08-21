@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import UniversalButton from '../../../components/UniversalButton';
 import UniversalInput from '../../../components/UniversalInput';
 import { THEME_COLORS } from '../../../constants/appConstants';
-import { RootState } from '../../../store';
+import { RootState, useAppDispatch } from '../../../store';
 import {
   deleteMedication,
   updateMedication,
@@ -30,7 +30,7 @@ const EditMedication: React.FC<EditMedicationProps> = ({
 }) => {
   const { id } = route.params;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const medication = useSelector((state: RootState) =>
     state.medications.medications.find(med => med.id === id),
   ) as IMedication;
