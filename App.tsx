@@ -5,19 +5,20 @@
  * @format
  */
 
-import React from "react";
-import { StoreProvider } from "./src/app/providers/storeProvider";
-import { NavigationProvider } from "./src/app/providers/navigationProvider/ui/NavigationProvider";
-import { MainStack } from "./src/app/navigationConfig";
+import React from 'react';
 
-function App (): React.JSX.Element {
-	return (
-		<StoreProvider>
-			<NavigationProvider>
-				<MainStack/>
-			</NavigationProvider>
-		</StoreProvider>
-	);
+import RootStack from './src/app/navigationConfig/ui/RootStack';
+import { NavigationProvider } from './src/app/providers/navigationProvider/ui/NavigationProvider';
+import { StoreProvider } from './src/app/providers/storeProvider';
+
+function App(): React.JSX.Element {
+  return (
+    <StoreProvider>
+      <NavigationProvider>
+        <RootStack />
+      </NavigationProvider>
+    </StoreProvider>
+  );
 }
 
 export default App;

@@ -1,5 +1,3 @@
-import Home from "./ui/Home";
+import Home from './ui/Home';
 
-export {
-	Home,
-};
+export { Home };

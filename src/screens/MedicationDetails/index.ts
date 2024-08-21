@@ -1,5 +1,3 @@
-import MedicationDetails from "./ui/MedicationDetails";
+import MedicationDetails from './ui/MedicationDetails';
 
-export {
-	MedicationDetails,
-};
+export { MedicationDetails };

@@ -1,5 +1,3 @@
-import { GestureHandlerProvider } from "./ui/GestureHandlerProvider";
+import { GestureHandlerProvider } from './ui/GestureHandlerProvider';
 
-export {
-	GestureHandlerProvider,
-};
+export { GestureHandlerProvider };

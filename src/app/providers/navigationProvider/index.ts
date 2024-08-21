@@ -1,5 +1,3 @@
-import { NavigationProvider } from "./ui/NavigationProvider";
+import { NavigationProvider } from './ui/NavigationProvider';
 
-export {
-	NavigationProvider,
-};
+export { NavigationProvider };

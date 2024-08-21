@@ -1,84 +1,158 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
-  Alert,
+  ActivityIndicator,
+  FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 
-import { HomeProps } from '../../../app/navigationConfig/types/MainStackTypes';
-import { THEME_COLORS } from '../../../shared/constants/appConstants';
-import FAB from '../../../shared/ui/FAB';
-import UniversalButton from '../../../shared/ui/UniversalButton';
+import { useSelector } from 'react-redux';
 
-const Home: React.FC<HomeProps> = ({ navigation }) => {
-  const card = () => {
+import { HomeProps } from '../../../app/navigationConfig/types/MainStackTypes';
+import FAB from '../../../components/FAB';
+import UniversalButton from '../../../components/UniversalButton';
+import { THEME_COLORS } from '../../../constants/appConstants';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { getMedicationsById } from '../../../store/medication/selectors/getMedications/getMedications';
+import {
+  fetchMedications,
+  updateMedicationCount,
+} from '../../../store/medication/slice/medicationsSlice';
+import { IMedication } from '../../../store/medication/types/medicationSchema';
+import { logoutUser } from '../../../store/user/slice/userSlice';
+import { convertTimeToDateTimeString } from '../../../utils/timeHandler';
+
+const MedicationItem = React.memo(
+  ({ item, navigation }: { item: IMedication; navigation }) => {
+    const dispatch = useAppDispatch();
+
+    const pressHandler = () => {
+      dispatch(
+        updateMedicationCount({
+          id: item.id,
+          key: 'initial_count',
+          type: 'increase',
+        }),
+      );
+    };
+
     return (
       <TouchableOpacity
         style={styles.cardContainer}
         onPress={() =>
-          navigation.navigate('MedicationDetails', { id: '12345' })
+          navigation.navigate('MedicationDetails', { id: item.id })
         }>
         <View style={styles.wrapper}>
-          <View style={styles.photoWrapper} />
           <View style={styles.contentWrapper}>
             <View style={styles.titleWrapper}>
-              <Text style={{ fontWeight: 700, fontSize: 24 }}>Name</Text>
+              <Text style={styles.titleText}>{item.name}</Text>
             </View>
             <View style={styles.timeWrapper}>
-              <Text style={{ fontWeight: 400, fontSize: 14, color: 'gray' }}>
-                Last update: Wed 7 Aug
+              <Text style={styles.timeText}>
+                {convertTimeToDateTimeString(
+                  item.updated_at || item.created_at,
+                )}
               </Text>
             </View>
-            <View style={styles.descriptionWrapper}>
-              <Text>Take Aspirin 75mg daily in the morning.</Text>
+            <View style={styles.countContainer}>
+              <Text style={styles.countLabel}>Destination Count:</Text>
+              <Text style={styles.countValue}>{item.destination_count}</Text>
             </View>
-            <View style={styles.counterWrapper}>
-              <Text>Take Aspirin 75mg daily in the morning.</Text>
+            <View style={styles.countContainer}>
+              <Text style={styles.countLabel}>Current Count:</Text>
+              <Text style={styles.countValue}>{item.current_count}</Text>
             </View>
-            <View style={styles.buttonsWrapper}>
-              <UniversalButton
-                label={'-'}
-                onPress={() => {
-                  console.log(111);
-                }}
-              />
-              <UniversalButton
-                label={'+'}
-                onPress={() => {
-                  console.log(111);
-                }}
-              />
-            </View>
+            <UniversalButton label="Take a medicine" onPress={pressHandler} />
           </View>
         </View>
       </TouchableOpacity>
     );
-  };
+  },
+);
 
-  const handlePress = () => {
-    Alert.alert('FAB Pressed!');
+const Home: React.FC<HomeProps> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
+
+  const { medications, loading, error } = useSelector(
+    (state: RootState) => state.medications,
+  );
+
+  const handleGetMedications = useCallback((): void => {
+    dispatch(fetchMedications());
+    return;
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleGetMedications();
+  }, [dispatch, handleGetMedications]);
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={THEME_COLORS.PRIMARY} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.error}>{error}</Text>
+      </View>
+    );
+  }
+
+  const handlePress = async () => {
+    dispatch(logoutUser());
   };
 
   return (
-    <SafeAreaView style={styles.content}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        {card()}
-        {card()}
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <FlatList
+          refreshing={loading}
+          data={medications}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({ item }) => (
+            <MedicationItem item={item} navigation={navigation} />
+          )}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={10}
+          onRefresh={handleGetMedications}
+          contentContainerStyle={styles.contentContainer}
+        />
+      </View>
       <FAB title="+" onPress={handlePress} />
     </SafeAreaView>
   );
 };
 
-export default Home;
-
 const styles = StyleSheet.create({
-  content: {
+  centered: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  error: {
+    color: THEME_COLORS.ALARM,
+    fontSize: 18,
+  },
+  itemContainer: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: THEME_COLORS.WHITE,
+  },
+  itemName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  itemDescription: {
+    fontSize: 14,
+    color: THEME_COLORS.LIGHT30,
   },
   contentContainer: {
     flexGrow: 1,
@@ -87,13 +161,14 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   cardContainer: {
-    width: '100%',
+    width: 350,
     borderRadius: 16,
     marginBottom: 20,
     justifyContent: 'space-between',
-    backgroundColor: THEME_COLORS.white,
-    padding: 10,
-    shadowColor: THEME_COLORS.black,
+    backgroundColor: THEME_COLORS.WHITE,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    shadowColor: THEME_COLORS.DARK,
     shadowOffset: {
       width: 2,
       height: 2,
@@ -109,10 +184,21 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
   },
-  titleWrapper: {},
+  titleWrapper: {
+    marginBottom: 8,
+  },
+  titleText: {
+    fontWeight: 'bold',
+    fontSize: 28,
+  },
   timeWrapper: {
     height: 24,
-    marginBottom: 10,
+    marginBottom: 14,
+  },
+  timeText: {
+    fontWeight: 400,
+    fontSize: 14,
+    color: THEME_COLORS.DARK30,
   },
   descriptionWrapper: {
     marginBottom: 10,
@@ -127,14 +213,32 @@ const styles = StyleSheet.create({
   button: {
     height: 10,
     width: 120,
-    borderColor: 'red',
+    borderColor: THEME_COLORS.ERROR,
     borderWidth: 1,
   },
   photoWrapper: {
     height: 140,
     borderRadius: 12,
     marginBottom: 10,
-    borderColor: 'red',
+    borderColor: THEME_COLORS.ERROR,
     borderWidth: 1,
   },
+
+  countContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  countLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 8,
+    color: THEME_COLORS.DARK,
+  },
+  countValue: {
+    fontSize: 16,
+    color: THEME_COLORS.DARK,
+  },
 });
+
+export default Home;
