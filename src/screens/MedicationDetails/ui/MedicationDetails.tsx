@@ -2,23 +2,22 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 
+import {
+  MainStackParamList,
+  MedicationDetailsProps,
+} from '../../../app/navigationConfig/types/MainStackTypes';
 import UniversalButton from '../../../components/UniversalButton';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { RootState } from '../../../store';
 import { IMedication } from '../../../store/medication/types/medicationSchema';
 
-interface MedicationDetailsProps {
-  route: {
-    params: {
-      id: number;
-    };
-  };
-}
-
 const MedicationDetails: React.FC<MedicationDetailsProps> = ({ route }) => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+
   const { id } = route.params;
   const medication = useSelector((state: RootState) =>
     state.medications.medications.find(med => med.id === id),

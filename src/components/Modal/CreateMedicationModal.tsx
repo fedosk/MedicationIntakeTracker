@@ -102,12 +102,13 @@ const CreateMedicationModal: React.FC = () => {
             />
             <View style={styles.buttonContainer}>
               <UniversalButton
-                style={styles.cancelBtn}
+                style={[styles.btn, styles.cancelBtn]}
                 textStyle={styles.cancelBtnText}
                 label="Cancel"
                 onPress={() => setModalVisible(false)}
               />
               <UniversalButton
+                style={styles.btn}
                 label="Create"
                 onPress={handleCreateMedication}
               />
@@ -154,11 +155,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 20,
   },
+  btn: {
+    width: 140,
+  },
   cancelBtn: {
     backgroundColor: THEME_COLORS.LIGHT30,
     borderColor: THEME_COLORS.DARK10,
     borderWidth: 1,
-    width: '40%',
   },
   cancelBtnText: {
     color: THEME_COLORS.DARK50,

@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import {
+  AuthStackParamList,
+  LoginScreenProps,
+} from '../../../app/navigationConfig/types/authStackTypes';
 import UniversalButton from '../../../components/UniversalButton';
 import UniversalInput from '../../../components/UniversalInput';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { loginUser } from '../../../store/user/slice/userSlice';
 
-const LoginScreen = () => {
+const LoginScreen: React.FC<LoginScreenProps> = () => {
   const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
   const handleLogin = async () => {
     try {
@@ -67,6 +73,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     marginBottom: 32,
+    fontWeight: 'bold',
   },
   input: {
     height: 48,

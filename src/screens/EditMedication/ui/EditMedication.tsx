@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 
+import {
+  EditMedicationProps,
+  MainStackParamList,
+} from '../../../app/navigationConfig/types/MainStackTypes';
 import UniversalButton from '../../../components/UniversalButton';
 import UniversalInput from '../../../components/UniversalInput';
 import { THEME_COLORS } from '../../../constants/appConstants';
@@ -17,19 +22,12 @@ import {
   IMedicationWithoutTracking,
 } from '../../../store/medication/types/medicationSchema';
 
-interface EditMedicationProps {
-  route: {
-    params: {
-      id: number;
-    };
-  };
-}
-
 const EditMedication: React.FC<EditMedicationProps> = ({ route }) => {
   const { id } = route.params;
 
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   const medication = useSelector((state: RootState) =>
     state.medications.medications.find(med => med.id === id),

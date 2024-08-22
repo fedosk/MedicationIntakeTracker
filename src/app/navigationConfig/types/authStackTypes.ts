@@ -1,12 +1,15 @@
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type AuthStackParamList = {
-  Auth: undefined;
+export type AuthStackParamList = {
+  Login: undefined;
+  Registration: undefined;
 };
 
-export const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-
-export type Props = NativeStackScreenProps<AuthStackParamList, 'Auth'>;
+export type RegisterScreenProps = NativeStackScreenProps<
+  AuthStackParamList,
+  'Registration'
+>;
+export type LoginScreenProps = NativeStackScreenProps<
+  AuthStackParamList,
+  'Login'
+>;

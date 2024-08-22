@@ -2,7 +2,9 @@ import React, { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import { MainStackParamList } from '../../../app/navigationConfig/types/MainStackTypes';
 import UniversalButton from '../../../components/UniversalButton';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
@@ -14,7 +16,8 @@ const MedicationItem = React.memo(({ item }: { item: IMedication }) => {
   const { id, name, updated_at, created_at, destination_count, current_count } =
     item;
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   const pressHandler = (type: 'increase' | 'decrease') => {
     dispatch(
@@ -58,6 +61,7 @@ const MedicationItem = React.memo(({ item }: { item: IMedication }) => {
             />
             <UniversalButton
               label="Increase"
+              style={styles.btn}
               onPress={() => pressHandler('increase')}
               disabled={isButtonDisabled}
             />
@@ -76,7 +80,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   decreaseButton: {
+    width: 140,
     backgroundColor: THEME_COLORS.ERROR,
+  },
+  btn: {
+    width: 140,
   },
   cardContainer: {
     width: 350,

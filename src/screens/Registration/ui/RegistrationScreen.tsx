@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import {
+  AuthStackParamList,
+  RegisterScreenProps,
+} from '../../../app/navigationConfig/types/authStackTypes';
+import UniversalButton from '../../../components/UniversalButton';
+import UniversalInput from '../../../components/UniversalInput';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { registerUser } from '../../../store/user/slice/userSlice';
 
-const RegisterScreen = () => {
+const RegisterScreen: React.FC<RegisterScreenProps> = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -34,7 +34,7 @@ const RegisterScreen = () => {
     } catch (error) {
       Alert.alert(
         'Registration Failed',
-        error.response?.data?.message || 'An error occurred',
+        error instanceof Error ? error.message : 'An error occurred',
       );
     }
   };
@@ -42,53 +42,36 @@ const RegisterScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Register</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-        autoCorrect={false}
-        placeholderTextColor={THEME_COLORS.DARK30}
-      />
-      <TextInput
-        style={styles.input}
+      <UniversalInput
+        label={'Email'}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
-        autoCapitalize="none"
         autoCorrect={false}
-        placeholderTextColor={THEME_COLORS.DARK30}
       />
-      <TextInput
-        style={styles.input}
+      <UniversalInput
+        label={'Password'}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        autoCapitalize="none"
         autoCorrect={false}
-        placeholderTextColor={THEME_COLORS.DARK30}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
+      <UniversalInput
+        label={'Confirm password'}
+        placeholder="Confirm password"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
-        autoCapitalize="none"
         autoCorrect={false}
-        placeholderTextColor={THEME_COLORS.DARK30}
       />
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, styles.backButton]}
-        onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.buttonText}>Back to Login</Text>
-      </TouchableOpacity>
+      <UniversalButton label={'Register'} onPress={handleRegister} />
+      <UniversalButton
+        style={styles.backButton}
+        label={'Back to Login'}
+        onPress={() => navigation.navigate('Login')}
+      />
     </View>
   );
 };
@@ -101,8 +84,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   title: {
-    fontSize: 24,
-    marginBottom: 16,
+    fontSize: 32,
+    marginBottom: 32,
+    fontWeight: 'bold',
   },
   input: {
     height: 48,
