@@ -17,6 +17,7 @@ import UniversalButton from '../../../components/UniversalButton';
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { RootState } from '../../../store';
+import { getSortedMedications } from '../../../store/medication/selectors/getMedications/getMedications';
 import {
   fetchMedications,
   updateMedicationCount,
@@ -90,9 +91,10 @@ const MedicationItem = React.memo(
 const Home: React.FC<HomeProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
-  const { medications, loading, error } = useSelector(
+  const { loading, error } = useSelector(
     (state: RootState) => state.medications,
   );
+  const medications = useSelector(getSortedMedications);
 
   const handleGetMedications = useCallback((): void => {
     dispatch(fetchMedications());
