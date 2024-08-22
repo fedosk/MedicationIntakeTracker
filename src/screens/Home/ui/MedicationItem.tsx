@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   titleText: {
-    fontWeight: 'bold',
+    fontWeight: '700',
     fontSize: 28,
   },
   timeWrapper: {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   timeText: {
-    fontWeight: 400,
+    fontWeight: '700',
     fontSize: 14,
     color: THEME_COLORS.DARK30,
   },
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   },
   countLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginRight: 8,
     color: THEME_COLORS.DARK,
   },

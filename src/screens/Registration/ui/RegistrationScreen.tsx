@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     marginBottom: 32,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
   input: {
     height: 48,
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: THEME_COLORS.WHITE,
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   backButton: {

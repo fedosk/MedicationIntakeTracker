@@ -1,79 +1,101 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Medication Intake Tracker
 
-# Getting Started
+Welcome to the Medication Intake Tracker app! This README will guide you through setting up and running the app on your local development environment.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Prerequisites
 
-## Step 1: Start the Metro Server
+Before you start, ensure you have the following installed:
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- **Node.js** (version 18 or later)
+- **Yarn** (version 1.x or 2.x)
+- **React Native CLI**
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Installation
 
-```bash
-# using npm
-npm start
+1. **Clone the repository**:
 
-# OR using Yarn
-yarn start
+   ```sh
+   git clone https://github.com/your-repo/medication-intake-tracker.git
+   cd medication-intake-tracker
+   ```
+
+2. **Install dependencies**:
+
+   ```sh
+   yarn install
+   ```
+
+## Running the App
+
+### Android
+
+To run the app on an Android device or emulator, make sure you have the Android development environment set up. Refer to the [React Native Documentation](https://reactnative.dev/docs/environment-setup) for detailed setup instructions.
+
+1. **Start the Metro server**:
+
+   ```sh
+   yarn start
+   ```
+
+2. **Run the app on Android**:
+
+   ```sh
+   yarn android
+   ```
+
+### iOS
+
+To run the app on an iOS simulator or device, make sure you have the iOS development environment set up. Refer to the [React Native Documentation](https://reactnative.dev/docs/environment-setup) for detailed setup instructions.
+
+1. **Install pods**:
+
+   ```sh
+   cd ios
+   pod install
+   ```
+
+2. **Start the Metro server**:
+
+   ```sh
+   yarn start
+   ```
+
+3. **Run the app on iOS**:
+
+   ```sh
+   yarn ios
+   ```
+
+   By default, this command will attempt to run the app on the iPhone 15 simulator. Make sure you have at least Xcode 14 installed.
+
+## Linting and Formatting
+
+To ensure your code follows the project's linting and formatting rules, use the following commands:
+
+- **Lint the code**:
+
+  ```sh
+  yarn lint
+  ```
+
+- **Format the code using Prettier**:
+
+  ```sh
+  yarn prettier --write .
+  ```
+
+## Testing
+
+To run the tests, use the following command:
+
+```sh
+yarn test
 ```
 
-## Step 2: Start your Application
+## Environment Variables
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+The project may require certain environment variables. Make sure you have a `.env` file at the root of your project with the required variables:
 
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```env
+API_URL=http://localhost:8090/api
 ```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.

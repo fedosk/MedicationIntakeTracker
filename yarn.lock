@@ -2347,25 +2347,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "@react-native-community/datetimepicker@npm:8.2.0"
-  dependencies:
-    invariant: "npm:^2.2.4"
-  peerDependencies:
-    expo: ">=50.0.0"
-    react: "*"
-    react-native: "*"
-    react-native-windows: "*"
-  peerDependenciesMeta:
-    expo:
-      optional: true
-    react-native-windows:
-      optional: true
-  checksum: 10/57b51a9423d3ba49029e2d9905db040f7091285c51578eef5273baf3dd2e22bde6d1a17962a8dc5e0ac588dccff0ab36c9774f9da76363fca458ec42d30c4d66
-  languageName: node
-  linkType: hard
-
 "@react-native-community/eslint-config@npm:^3.2.0":
   version: 3.2.0
   resolution: "@react-native-community/eslint-config@npm:3.2.0"
@@ -3359,7 +3340,6 @@ __metadata:
     "@babel/preset-env": "npm:^7.20.0"
     "@babel/runtime": "npm:^7.20.0"
     "@react-native-async-storage/async-storage": "npm:^1.24.0"
-    "@react-native-community/datetimepicker": "npm:^8.2.0"
     "@react-native-community/eslint-config": "npm:^3.2.0"
     "@react-native/babel-preset": "npm:0.74.86"
     "@react-native/eslint-config": "npm:0.74.86"
@@ -3394,10 +3374,8 @@ __metadata:
     react: "npm:18.2.0"
     react-native: "npm:0.74.4"
     react-native-gesture-handler: "npm:^2.18.1"
-    react-native-modal-datetime-picker: "npm:^17.1.0"
     react-native-safe-area-context: "npm:^4.10.8"
     react-native-screens: "npm:^3.33.0"
-    react-native-vector-icons: "npm:^10.1.0"
     react-redux: "npm:^9.1.2"
     react-test-renderer: "npm:18.2.0"
     redux-persist: "npm:^6.0.0"
@@ -4188,17 +4166,6 @@ __metadata:
     strip-ansi: "npm:^6.0.0"
     wrap-ansi: "npm:^6.2.0"
   checksum: 10/44afbcc29df0899e87595590792a871cd8c4bc7d6ce92832d9ae268d141a77022adafca1aeaeccff618b62a613b8354e57fe22a275c199ec04baf00d381ef6ab
-  languageName: node
-  linkType: hard
-
-"cliui@npm:^7.0.2":
-  version: 7.0.4
-  resolution: "cliui@npm:7.0.4"
-  dependencies:
-    string-width: "npm:^4.2.0"
-    strip-ansi: "npm:^6.0.0"
-    wrap-ansi: "npm:^7.0.0"
-  checksum: 10/db858c49af9d59a32d603987e6fddaca2ce716cd4602ba5a2bb3a5af1351eebe82aba8dff3ef3e1b331f7fa9d40ca66e67bdf8e7c327ce0ea959747ead65c0ef
   languageName: node
   linkType: hard
 
@@ -8702,18 +8669,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-modal-datetime-picker@npm:^17.1.0":
-  version: 17.1.0
-  resolution: "react-native-modal-datetime-picker@npm:17.1.0"
-  dependencies:
-    prop-types: "npm:^15.7.2"
-  peerDependencies:
-    "@react-native-community/datetimepicker": ">=6.7.0"
-    react-native: ">=0.65.0"
-  checksum: 10/fcb20d62885b0a288719c21b731fb4129be9f5e3a78e0d9971bfcc8e6083164434da13ddab0079d0924074b3324f5ec7d664598127db5470b4eb7278960e01df
-  languageName: node
-  linkType: hard
-
 "react-native-safe-area-context@npm:^4.10.8":
   version: 4.10.8
   resolution: "react-native-safe-area-context@npm:4.10.8"
@@ -8734,21 +8689,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/ad8f3534fae650b0d64ba3cc7e4f5cb3af81172a1064cacdd963ae9dd3628843ff4dda8e152dc7022fa3e9a04bff79e41ae3de351416a76f8d9fb5856079665b
-  languageName: node
-  linkType: hard
-
-"react-native-vector-icons@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "react-native-vector-icons@npm:10.1.0"
-  dependencies:
-    prop-types: "npm:^15.7.2"
-    yargs: "npm:^16.1.1"
-  bin:
-    fa-upgrade.sh: bin/fa-upgrade.sh
-    fa5-upgrade: bin/fa5-upgrade.sh
-    fa6-upgrade: bin/fa6-upgrade.sh
-    generate-icon: bin/generate-icon.js
-  checksum: 10/99877f36aeb61435d2f3dc18adaa08af9be9e88e4770efe47d733bd164b2c02ae332babecdcfcee9e3c7b1d80b5b107034e245733091638295eb3050f389f798
   languageName: node
   linkType: hard
 
@@ -10567,13 +10507,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^20.2.2":
-  version: 20.2.9
-  resolution: "yargs-parser@npm:20.2.9"
-  checksum: 10/0188f430a0f496551d09df6719a9132a3469e47fe2747208b1dd0ab2bb0c512a95d0b081628bbca5400fb20dbf2fabe63d22badb346cecadffdd948b049f3fcc
-  languageName: node
-  linkType: hard
-
 "yargs-parser@npm:^21.1.1":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
@@ -10597,21 +10530,6 @@ __metadata:
     y18n: "npm:^4.0.0"
     yargs-parser: "npm:^18.1.2"
   checksum: 10/bbcc82222996c0982905b668644ca363eebe6ffd6a572fbb52f0c0e8146661d8ce5af2a7df546968779bb03d1e4186f3ad3d55dfaadd1c4f0d5187c0e3a5ba16
-  languageName: node
-  linkType: hard
-
-"yargs@npm:^16.1.1":
-  version: 16.2.0
-  resolution: "yargs@npm:16.2.0"
-  dependencies:
-    cliui: "npm:^7.0.2"
-    escalade: "npm:^3.1.1"
-    get-caller-file: "npm:^2.0.5"
-    require-directory: "npm:^2.1.1"
-    string-width: "npm:^4.2.0"
-    y18n: "npm:^5.0.5"
-    yargs-parser: "npm:^20.2.2"
-  checksum: 10/807fa21211d2117135d557f95fcd3c3d390530cda2eca0c840f1d95f0f40209dcfeb5ec18c785a1f3425896e623e3b2681e8bb7b6600060eda1c3f4804e7957e
   languageName: node
   linkType: hard
 

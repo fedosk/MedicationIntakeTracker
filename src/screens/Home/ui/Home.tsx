@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -103,8 +104,8 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: THEME_COLORS.ALARM,
     fontSize: 10,
-    bottom: 60,
-    left: 30,
+    bottom: Platform.OS === 'ios' ? 60 : 30,
+    left: 40,
     position: 'absolute',
   },
   logoutText: {

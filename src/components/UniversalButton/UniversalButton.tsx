@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: THEME_COLORS.WHITE,
-    fontWeight: 'bold',
+    fontWeight: '700',
     textAlign: 'center',
   },
   buttonDisabled: {

@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: THEME_COLORS.DARK,
   },
   editButton: {
@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 10,
     color: THEME_COLORS.DARK,
   },
@@ -141,7 +140,6 @@ const styles = StyleSheet.create({
   },
   countLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginRight: 8,
     color: THEME_COLORS.DARK,
   },
