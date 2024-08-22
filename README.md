@@ -83,19 +83,3 @@ To ensure your code follows the project's linting and formatting rules, use the 
   ```sh
   yarn prettier --write .
   ```
-
-## Testing
-
-To run the tests, use the following command:
-
-```sh
-yarn test
-```
-
-## Environment Variables
-
-The project may require certain environment variables. Make sure you have a `.env` file at the root of your project with the required variables:
-
-```env
-API_URL=http://localhost:8090/api
-```
