@@ -50,7 +50,7 @@ const LoginScreen = () => {
       <UniversalButton label={'Login'} onPress={handleLogin} />
       <UniversalButton
         style={styles.signUpButton}
-        label={'Sign Up'}
+        label={'Registration'}
         onPress={() => navigation.navigate('Registration')}
       />
     </View>

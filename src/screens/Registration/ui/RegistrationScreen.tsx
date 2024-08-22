@@ -8,12 +8,15 @@ import {
   View,
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { THEME_COLORS } from '../../../constants/appConstants';
 import { useAppDispatch } from '../../../hooks/reduxHooks';
 import { registerUser } from '../../../store/user/slice/userSlice';
 
-const RegisterScreen = ({ navigation }) => {
+const RegisterScreen = () => {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -28,10 +31,6 @@ const RegisterScreen = ({ navigation }) => {
 
     try {
       dispatch(registerUser({ email, password }));
-
-      Alert.alert('Success', 'Registration Successful', [
-        { text: 'OK', onPress: () => navigation.navigate('Login') },
-      ]);
     } catch (error) {
       Alert.alert(
         'Registration Failed',

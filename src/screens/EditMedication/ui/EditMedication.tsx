@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import UniversalButton from '../../../components/UniversalButton';
@@ -24,13 +25,12 @@ interface EditMedicationProps {
   };
 }
 
-const EditMedication: React.FC<EditMedicationProps> = ({
-  navigation,
-  route,
-}) => {
+const EditMedication: React.FC<EditMedicationProps> = ({ route }) => {
   const { id } = route.params;
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
+
   const medication = useSelector((state: RootState) =>
     state.medications.medications.find(med => med.id === id),
   ) as IMedication;
